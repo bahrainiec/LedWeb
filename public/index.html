@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Realtime Arduino Control</title>
+</head>
+<body>
+  <h1>Arduino Realtime Control</h1>
+  <button id="btnOn">ON</button>
+  <button id="btnOff">OFF</button>
+  <p>Status LED: <span id="status">-</span></p>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    document.getElementById('btnOn').onclick = () => {
+      socket.emit('command', 'ON');
+    };
+    document.getElementById('btnOff').onclick = () => {
+      socket.emit('command', 'OFF');
+    };
+
+    socket.on('status', data => {
+      // Data seperti "STATUS:ON" atau "STATUS:OFF"
+      const statusEl = document.getElementById('status');
+      statusEl.textContent = data.split(':')[1];
+    });
+  </script>
+</body>
+</html>
